@@ -10,15 +10,15 @@
 using namespace std;
 using namespace z3;
 
-V8Predictor::V8Predictor(vector<double_t> sequence) :
-      context(), 
+V8Predictor::V8Predictor(vector<double> sequence) :
+      context(),
       solver(context),
       sState0(this->context.bv_const("se_state0", 64)),
       sState1(this->context.bv_const("se_state1", 64)) {
   this->sequence = sequence;
   reverse(this->sequence.begin(), this->sequence.end());
 
-  for (double_t observed : this->sequence) {
+  for (double observed : this->sequence) {
     xorShift128PlusSymbolic();
     uint64_t mantissa = recoverMantissa(observed + 1);
     solver.add(this->context.bv_val(mantissa, 64) == lshr(sState0, 12));
@@ -38,20 +38,20 @@ V8Predictor::V8Predictor(vector<double_t> sequence) :
   }
 }
 
-double_t V8Predictor::predictNext() {
+double V8Predictor::predictNext() {
   uint64_t out = xorShift128PlusConcreteBackwards();
   return toDouble(out);
 }
 
 void V8Predictor::xorShift128PlusSymbolic() {
-  expr s1 = this->sState0;
-  expr s0 = this->sState1;
-  this->sState0 = s0;
+  expr s1 = sState0;
+  expr s0 = sState1;
+  sState0 = s0;
   s1 = s1 ^ shl(s1, 23);
   s1 = s1 ^ lshr(s1, 17);
   s1 = s1 ^ s0;
   s1 = s1 ^ lshr(s0, 26);
-  this->sState1 = s1;
+  sState1 = s1;
 }
 
 uint64_t V8Predictor::xorShift128PlusConcreteBackwards() {
@@ -66,12 +66,10 @@ uint64_t V8Predictor::xorShift128PlusConcreteBackwards() {
   return result;
 }
 
-uint64_t V8Predictor::recoverMantissa(double_t value) {
-  uint64_t asUint;
-  std::memcpy(&asUint, &value, sizeof(double_t));
-  return asUint & ((1ULL << 52) - 1);
+uint64_t V8Predictor::recoverMantissa(double value) {
+  return bit_cast<uint64_t>(value) & ((1ULL << 52) - 1);
 }
 
-double_t V8Predictor::toDouble(uint64_t value) {
-  return bit_cast<double_t>((value >> 12) | 0x3FF0000000000000) - 1;
+double V8Predictor::toDouble(uint64_t value) {
+  return bit_cast<double>((value >> 12) | 0x3FF0000000000000) - 1;
 }
