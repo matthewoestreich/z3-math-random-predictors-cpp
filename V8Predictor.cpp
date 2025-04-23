@@ -33,7 +33,7 @@ V8Predictor::V8Predictor(vector<double_t> sequence) :
   cState1 = model.eval(sState1).as_uint64();
 
   // We need to get concrete state up to symbolic state..
-  for (double_t _ : this->sequence) {
+  for (size_t i = 0; i < this->sequence.size(); ++i) {
     xorShift128PlusConcreteBackwards();
   }
 }

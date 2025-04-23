@@ -1,5 +1,6 @@
 z3-4.14.1-x64-osx-13.7.4.zip
 main
+.DS_Store
 
 # Prerequisites
 *.d
