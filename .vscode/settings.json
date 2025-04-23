@@ -1,0 +1,11 @@
+{
+  "makefile.configureOnOpen": false,
+  "files.associations": {
+    "*.ejs": "html",
+    "*.ino": "cpp",
+    "*.pug": "pug",
+    "__locale": "cpp",
+    "chrono": "cpp",
+    "functional": "cpp"
+  }
+}
