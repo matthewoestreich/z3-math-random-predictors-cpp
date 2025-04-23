@@ -1,6 +1,6 @@
 CXX = clang++
-CXXFLAGS = -std=c++23 -O2 -Iz3/include -MMD -MP
-LDFLAGS = -Lz3/bin -lz3
+CXXFLAGS = -std=c++23 -O2 -I./include -MMD -MP
+LDFLAGS = ./lib/libz3.a
 
 TARGET = main
 SRCS = $(wildcard *.cpp)
