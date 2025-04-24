@@ -1,26 +1,21 @@
 #pragma once
 
-#include <cstdint>
-#include <vector>
 #include <z3++.h>
-
-using namespace std;
-using namespace z3;
 
 class V8Predictor {
 public:
-  V8Predictor(const vector<double> &sequence);
+  V8Predictor(const std::vector<double> &sequence);
   double predictNext();
 
 private:
   static const uint64_t mask = 0xFFFFFFFFFFFFFFFF;
-  vector<double> sequence;
+  std::vector<double> sequence;
   uint64_t cState0;
   uint64_t cState1;
-  context context;
-  solver solver;
-  expr sState0;
-  expr sState1;
+  z3::context context;
+  z3::solver solver;
+  z3::expr sState0;
+  z3::expr sState1;
 
   void xorShift128PlusSymbolic();
   uint64_t xorShift128PlusConcreteBackwards();

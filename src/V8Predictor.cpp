@@ -1,19 +1,11 @@
 #include "V8Predictor.hpp"
-#include <algorithm>
-#include <bit>
-#include <cstdint>
-#include <cstring>
-#include <vector>
 #include <z3++.h>
 
-using namespace std;
-using namespace z3;
-
-V8Predictor::V8Predictor(const vector<double> &sequence) :
+V8Predictor::V8Predictor(const std::vector<double> &sequence) :
       context(),
       solver(context),
-      sState0(this->context.bv_const("se_state0", 64)),
-      sState1(this->context.bv_const("se_state1", 64)) {
+      sState0(context.bv_const("se_state0", 64)),
+      sState1(context.bv_const("se_state1", 64)) {
   this->sequence = sequence;
   reverse(this->sequence.begin(), this->sequence.end());
 
@@ -23,11 +15,11 @@ V8Predictor::V8Predictor(const vector<double> &sequence) :
     solver.add(this->context.bv_val(mantissa, 64) == lshr(sState0, 12));
   }
 
-  if (solver.check() != sat) {
-    throw runtime_error("UNSAT");
+  if (solver.check() != z3::sat) {
+    throw std::runtime_error("UNSAT");
   }
 
-  model model = solver.get_model();
+  z3::model model = solver.get_model();
   cState0 = model.eval(sState0).as_uint64();
   cState1 = model.eval(sState1).as_uint64();
 
@@ -43,8 +35,8 @@ double V8Predictor::predictNext() {
 }
 
 void V8Predictor::xorShift128PlusSymbolic() {
-  expr s1 = sState0;
-  expr s0 = sState1;
+  z3::expr s1 = sState0;
+  z3::expr s0 = sState1;
   sState0 = s0;
   s1 = s1 ^ shl(s1, 23);
   s1 = s1 ^ lshr(s1, 17);
@@ -66,9 +58,9 @@ uint64_t V8Predictor::xorShift128PlusConcreteBackwards() {
 }
 
 uint64_t V8Predictor::recoverMantissa(double value) {
-  return bit_cast<uint64_t>(value) & ((1ULL << 52) - 1);
+  return std::bit_cast<uint64_t>(value) & ((1ULL << 52) - 1);
 }
 
 double V8Predictor::toDouble(uint64_t value) {
-  return bit_cast<double>((value >> 12) | 0x3FF0000000000000) - 1;
+  return std::bit_cast<double>((value >> 12) | 0x3FF0000000000000) - 1;
 }
