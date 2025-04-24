@@ -3,14 +3,13 @@
 #include <bit>
 #include <cstdint>
 #include <cstring>
-#include <iostream>
 #include <vector>
 #include <z3++.h>
 
 using namespace std;
 using namespace z3;
 
-V8Predictor::V8Predictor(vector<double> sequence) :
+V8Predictor::V8Predictor(const vector<double> &sequence) :
       context(),
       solver(context),
       sState0(this->context.bv_const("se_state0", 64)),
@@ -60,7 +59,7 @@ uint64_t V8Predictor::xorShift128PlusConcreteBackwards() {
   uint64_t ps0 = cState1 ^ (cState0 >> 26);
   ps0 = ps0 ^ cState0;
   ps0 = ps0 ^ (ps0 >> 17) ^ (ps0 >> 34) ^ (ps0 >> 51);
-  ps0 = (ps0 ^ (ps0 << 23) ^ (ps0 << 46)) & mask;
+  ps0 = (ps0 ^ (ps0 << 23) ^ (ps0 << 46)) & V8Predictor::mask;
   cState0 = ps0;
   cState1 = ps1;
   return result;

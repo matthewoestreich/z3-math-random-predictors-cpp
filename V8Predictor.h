@@ -9,14 +9,14 @@ using namespace z3;
 
 class V8Predictor {
 public:
-  explicit V8Predictor(vector<double> sequence);
+  V8Predictor(const vector<double> &sequence);
   double predictNext();
 
 private:
-  const uint64_t mask = 0xFFFFFFFFFFFFFFFF;
+  static const uint64_t mask = 0xFFFFFFFFFFFFFFFF;
   vector<double> sequence;
-  uint64_t cState0 = 0;
-  uint64_t cState1 = 0;
+  uint64_t cState0;
+  uint64_t cState1;
   context context;
   solver solver;
   expr sState0;

@@ -1,5 +1,18 @@
 z3-4.14.1-x64-osx-13.7.4.zip
 main
+.cache
+# CMake build directories
+/build/
+compile_commands.json
+
+# CMake cache and generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+*.cmake
+
+# MacOS specific files
 .DS_Store
 
 # Prerequisites
