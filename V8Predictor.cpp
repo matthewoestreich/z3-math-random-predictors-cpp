@@ -59,7 +59,7 @@ uint64_t V8Predictor::xorShift128PlusConcreteBackwards() {
   uint64_t ps0 = cState1 ^ (cState0 >> 26);
   ps0 = ps0 ^ cState0;
   ps0 = ps0 ^ (ps0 >> 17) ^ (ps0 >> 34) ^ (ps0 >> 51);
-  ps0 = (ps0 ^ (ps0 << 23) ^ (ps0 << 46)) & V8Predictor::mask;
+  ps0 = (ps0 ^ (ps0 << 23) ^ (ps0 << 46)) & mask;
   cState0 = ps0;
   cState1 = ps1;
   return result;
