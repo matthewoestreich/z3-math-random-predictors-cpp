@@ -1,6 +1,7 @@
 z3-4.14.1-x64-osx-13.7.4.zip
 main
 .cache
+
 # CMake build directories
 /build/
 compile_commands.json
@@ -47,3 +48,9 @@ cmake_install.cmake
 *.exe
 *.out
 *.app
+
+# INCLUDE THESE SPECIAL FILES
+# MUST BE AT BOTTOM OF .gitignore!!
+!/lib/**/*.a
+!lib/**/*.dylib
+!lib/**/*.dll
