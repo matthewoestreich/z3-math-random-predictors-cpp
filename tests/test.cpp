@@ -13,7 +13,7 @@ TEST_CASE("FirefoxPredictor", "[FirefoxPredictor]") {
       0.49171337524788294, 0.6991749430716799,  0.9530887478758369, 0.781511163650037,  0.699311162730038,
   };
 
-  double next = 0.13963871472821332;
+  double next = expected[0];
 
   SECTION("Test predictNext()") {
     FirefoxPredictor firefox(sequence);
@@ -31,9 +31,9 @@ TEST_CASE("V8Predictor", "[V8Predictor]") {
       0.3817506775921966, 0.796686249606257, 0.9976624647084931, 0.39031891128710483, 0.7825669445360215,
   };
 
-  double next = 0.3817506775921966;
+  double next = expected[0];
 
-  SECTION("Test recoverMantissa") {
+  SECTION("Test predictNext()") {
     V8Predictor v8(sequence);
     REQUIRE(v8.predictNext() == next);
   }
