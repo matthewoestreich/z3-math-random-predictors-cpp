@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-SET(THIRD_PARTY_LIBS_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/nix")
+set(THIRD_PARTY_LIBS_DIRECTORY "${CMAKE_SOURCE_DIR}/lib/nix")
 
 #-------------------------------------------------------------------------------------------------------------------------------#
 # Main
