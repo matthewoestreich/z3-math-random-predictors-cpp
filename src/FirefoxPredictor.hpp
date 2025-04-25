@@ -2,9 +2,9 @@
 
 #include <z3++.h>
 
-class V8Predictor {
+class FirefoxPredictor {
 public:
-  V8Predictor(const std::vector<double> &sequence);
+  FirefoxPredictor(const std::vector<double> &sequence);
   double predictNext();
 
 private:
@@ -15,9 +15,12 @@ private:
   z3::solver solver;
   z3::expr sState0;
   z3::expr sState1;
+  z3::expr kDoubleSignificantMaskSymbolic;
+  static constexpr int kDoubleSignificantBits = 53;
+  static constexpr uint64_t kDoubleSignificantMask = 0x1FFFFFFFFFFFFF;
 
   void xorShift128PlusSymbolic();
-  uint64_t xorShift128PlusConcreteBackwards();
+  uint64_t xorShift128PlusConcrete();
   uint64_t recoverMantissa(double value);
   double toDouble(uint64_t value);
 };

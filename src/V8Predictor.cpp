@@ -12,7 +12,7 @@ V8Predictor::V8Predictor(const std::vector<double> &sequence) :
   for (double observed : this->sequence) {
     xorShift128PlusSymbolic();
     uint64_t mantissa = recoverMantissa(observed + 1);
-    solver.add(this->context.bv_val(mantissa, 64) == lshr(sState0, 12));
+    solver.add(context.bv_val(mantissa, 64) == lshr(sState0, 12));
   }
 
   if (solver.check() != z3::sat) {
@@ -51,7 +51,7 @@ uint64_t V8Predictor::xorShift128PlusConcreteBackwards() {
   uint64_t ps0 = cState1 ^ (cState0 >> 26);
   ps0 = ps0 ^ cState0;
   ps0 = ps0 ^ (ps0 >> 17) ^ (ps0 >> 34) ^ (ps0 >> 51);
-  ps0 = (ps0 ^ (ps0 << 23) ^ (ps0 << 46)) & mask;
+  ps0 = (ps0 ^ (ps0 << 23) ^ (ps0 << 46));
   cState0 = ps0;
   cState1 = ps1;
   return result;
