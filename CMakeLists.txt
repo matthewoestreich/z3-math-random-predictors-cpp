@@ -32,8 +32,6 @@ link_directories(${THIRD_PARTY_LIBS_DIRECTORY})
 target_link_libraries(main 
   PUBLIC
     ${THIRD_PARTY_LIBS}
-  PRIVATE 
-    Catch2::Catch2WithMain
 )
 
 
