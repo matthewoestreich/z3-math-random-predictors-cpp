@@ -2,9 +2,9 @@
 
 #include <z3++.h>
 
-class V8Predictor {
+class ChromePredictor {
 public:
-  V8Predictor(const std::vector<double> &sequence);
+  ChromePredictor(const std::vector<double> &sequence);
   double predictNext();
 
 private:
