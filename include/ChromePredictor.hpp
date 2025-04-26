@@ -3,7 +3,7 @@
 #include <z3++.h>
 
 class ChromePredictor {
-private:
+ private:
   std::vector<double> sequence;
   uint64_t cState0;
   uint64_t cState1;
@@ -17,7 +17,7 @@ private:
   uint64_t recoverMantissa(double value);
   double toDouble(uint64_t value);
 
-public:
+ public:
   ChromePredictor(const std::vector<double> &sequence);
   double predictNext();
 };

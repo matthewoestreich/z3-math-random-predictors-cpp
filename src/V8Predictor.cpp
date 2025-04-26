@@ -1,8 +1,9 @@
 #include "V8Predictor.hpp"
+
 #include <z3++.h>
 
-V8Predictor::V8Predictor(const std::vector<double> &sequence) :
-      context(),
+V8Predictor::V8Predictor(const std::vector<double> &sequence)
+    : context(),
       solver(context),
       sState0(context.bv_const("se_state0", 64)),
       sState1(context.bv_const("se_state1", 64)) {

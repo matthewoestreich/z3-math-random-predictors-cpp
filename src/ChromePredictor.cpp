@@ -1,8 +1,9 @@
 #include "ChromePredictor.hpp"
+
 #include <z3++.h>
 
-ChromePredictor::ChromePredictor(const std::vector<double> &sequence) :
-      context(),
+ChromePredictor::ChromePredictor(const std::vector<double> &sequence)
+    : context(),
       solver(context),
       sState0(context.bv_const("se_state0", 64)),
       sState1(context.bv_const("se_state1", 64)) {
@@ -45,7 +46,8 @@ void ChromePredictor::xorShift128PlusSymbolic() {
 }
 
 /**
- * Performs the concrete XOR backwards due to how Chrome provides random numbers.
+ * Performs the concrete XOR backwards due to how Chrome provides random
+ * numbers.
  */
 uint64_t ChromePredictor::xorShift128PlusConcrete() {
   uint64_t result = cState0;
