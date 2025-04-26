@@ -4,9 +4,9 @@
 FirefoxPredictor::FirefoxPredictor(const std::vector<double> &sequence) :
       context(),
       solver(context),
-      kDoubleSignificantMaskSymbolic(context.bv_val(kDoubleSignificantMask, 64)),
       sState0(context.bv_const("se_state0", 64)),
-      sState1(context.bv_const("se_state1", 64)) {
+      sState1(context.bv_const("se_state1", 64)),
+      kDoubleSignificantMaskSymbolic(context.bv_val(kDoubleSignificantMask, 64)) {
   this->sequence = sequence;
 
   for (double observed : this->sequence) {

@@ -3,10 +3,6 @@
 #include <z3++.h>
 
 class FirefoxPredictor {
-public:
-  FirefoxPredictor(const std::vector<double> &sequence);
-  double predictNext();
-
 private:
   std::vector<double> sequence;
   uint64_t cState0;
@@ -23,4 +19,8 @@ private:
   uint64_t xorShift128PlusConcrete();
   uint64_t recoverMantissa(double value);
   double toDouble(uint64_t value);
+
+public:
+  FirefoxPredictor(const std::vector<double> &sequence);
+  double predictNext();
 };

@@ -36,11 +36,11 @@ double V8Predictor::predictNext() {
 void V8Predictor::xorShift128PlusSymbolic() {
   z3::expr s1 = sState0;
   z3::expr s0 = sState1;
-  sState0 = s0;
-  s1 = s1 ^ shl(s1, 23);
-  s1 = s1 ^ lshr(s1, 17);
+  s1 = s1 ^ z3::shl(s1, 23);
+  s1 = s1 ^ z3::lshr(s1, 17);
   s1 = s1 ^ s0;
-  s1 = s1 ^ lshr(s0, 26);
+  s1 = s1 ^ z3::lshr(s0, 26);
+  sState0 = sState1;
   sState1 = s1;
 }
 

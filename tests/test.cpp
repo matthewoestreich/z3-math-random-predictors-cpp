@@ -18,7 +18,7 @@ TEST_CASE("FirefoxPredictor", "[FirefoxPredictor]") {
     FirefoxPredictor firefox(sequence);
     std::vector<double> predictions;
 
-    for (double expect : expected) {
+    for (size_t i = 0; i < expected.size(); ++i) {
       predictions.push_back(firefox.predictNext());
     }
 
@@ -42,7 +42,7 @@ TEST_CASE("ChromePredictor", "[ChromePredictor]") {
     ChromePredictor chrome(sequence);
     std::vector<double> predictions;
 
-    for (double expect : expected) {
+    for (size_t i = 0; i < expected.size(); ++i) {
       predictions.push_back(chrome.predictNext());
     }
 
@@ -62,7 +62,7 @@ TEST_CASE("V8Predictor", "[V8Predictor]") {
     V8Predictor v8(sequence);
     std::vector<double> predictions;
 
-    for (double expect : expected) {
+    for (size_t i = 0; i < expected.size(); ++i) {
       predictions.push_back(v8.predictNext());
     }
 
