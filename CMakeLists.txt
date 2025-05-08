@@ -84,7 +84,6 @@ add_custom_target(fmt
     --fallback-style=none
     --assume-filename=$ENV{HOME}/.clang-format
     ${PROJECT_SOURCE_DIR}/src/*.cpp
-    ${PROJECT_SOURCE_DIR}/src/*.hpp
     ${PROJECT_SOURCE_DIR}/include/*.hpp
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
