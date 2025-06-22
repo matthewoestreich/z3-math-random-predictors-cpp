@@ -1,12 +1,12 @@
-#include "ChromePredictor.hpp"
-
 #include <z3++.h>
 
+#include "ChromePredictor.hpp"
+
 ChromePredictor::ChromePredictor(const std::vector<double> &sequence)
-    : context(),
-      solver(context),
-      sState0(context.bv_const("se_state0", 64)),
-      sState1(context.bv_const("se_state1", 64)) {
+  : context(),
+    solver(context),
+    sState0(context.bv_const("se_state0", 64)),
+    sState1(context.bv_const("se_state1", 64)) {
   this->sequence = sequence;
   reverse(this->sequence.begin(), this->sequence.end());
 

@@ -3,11 +3,11 @@
 #include <z3++.h>
 
 class ChromePredictor {
- public:
+public:
   ChromePredictor(const std::vector<double> &sequence);
   double predictNext();
 
- private:
+private:
   std::vector<double> sequence;
   uint64_t cState0;
   uint64_t cState1;

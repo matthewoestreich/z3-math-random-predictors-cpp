@@ -1,19 +1,21 @@
+#include <bit>
+#include <cstdint>
+#include <sstream>
+
 #include "V8Predictor.hpp"
 
-#include <z3++.h>
-
-V8Predictor::V8Predictor(const std::vector<double> &sequence)
-    : context(),
-      solver(context),
-      sState0(context.bv_const("se_state0", 64)),
-      sState1(context.bv_const("se_state1", 64)) {
+V8Predictor::V8Predictor(const NodeVersion &version, const std::vector<double> &sequence)
+  : nodeVersion(version),
+    context(),
+    solver(context),
+    sState0(context.bv_const("se_state0", 64)),
+    sState1(context.bv_const("se_state1", 64)) {
   this->sequence = sequence;
   reverse(this->sequence.begin(), this->sequence.end());
 
   for (double observed : this->sequence) {
     xorShift128PlusSymbolic();
-    uint64_t mantissa = recoverMantissa(observed + 1);
-    solver.add(context.bv_val(mantissa, 64) == lshr(sState0, 12));
+    recoverMantissaAndAddToSolver(observed);
   }
 
   if (solver.check() != z3::sat) {
@@ -60,10 +62,32 @@ uint64_t V8Predictor::xorShift128PlusConcrete() {
   return result;
 }
 
-uint64_t V8Predictor::recoverMantissa(double value) {
-  return std::bit_cast<uint64_t>(value) & ((1ULL << 52) - 1);
+void V8Predictor::recoverMantissaAndAddToSolver(double value) {
+  if (nodeVersion.major >= 24) {
+    uint64_t mantissa = static_cast<uint64_t>(value * static_cast<double>(1ULL << 53));
+    solver.add(lshr(sState0, 11) == context.bv_val(mantissa, 64));
+    return;
+  }
+  if (nodeVersion.major < 24) {
+    uint64_t mantissa = std::bit_cast<uint64_t>(value + 1) & ((1ULL << 52) - 1);
+    solver.add(context.bv_val(mantissa, 64) == lshr(sState0, 12));
+    return;
+  }
+  std::stringstream ss;
+  ss << "[V8Predictor] Error recovering mantissa! Unrecognized Node.js Version : v" << nodeVersion.major << "."
+     << nodeVersion.minor << "." << nodeVersion.patch;
+  throw std::runtime_error(ss.str());
 }
 
 double V8Predictor::toDouble(uint64_t value) {
-  return std::bit_cast<double>((value >> 12) | 0x3FF0000000000000) - 1;
+  if (nodeVersion.major >= 24) {
+    return static_cast<double>(value >> 11) / static_cast<double>(1ULL << 53);
+  }
+  if (nodeVersion.major < 24) {
+    return std::bit_cast<double>((value >> 12) | 0x3FF0000000000000) - 1;
+  }
+  std::stringstream ss;
+  ss << "[V8Predictor] Error converting to double! Unrecognized Node.js Version : v" << nodeVersion.major << "."
+     << nodeVersion.minor << "." << nodeVersion.patch;
+  throw std::runtime_error(ss.str());
 }

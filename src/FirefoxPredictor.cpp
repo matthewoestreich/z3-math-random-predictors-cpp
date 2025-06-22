@@ -1,21 +1,19 @@
-#include "FirefoxPredictor.hpp"
-
 #include <z3++.h>
 
+#include "FirefoxPredictor.hpp"
+
 FirefoxPredictor::FirefoxPredictor(const std::vector<double> &sequence)
-    : context(),
-      solver(context),
-      sState0(context.bv_const("se_state0", 64)),
-      sState1(context.bv_const("se_state1", 64)),
-      kDoubleSignificantMaskSymbolic(
-          context.bv_val(kDoubleSignificantMask, 64)) {
+  : context(),
+    solver(context),
+    sState0(context.bv_const("se_state0", 64)),
+    sState1(context.bv_const("se_state1", 64)),
+    kDoubleSignificantMaskSymbolic(context.bv_val(kDoubleSignificantMask, 64)) {
   this->sequence = sequence;
 
   for (double observed : this->sequence) {
     uint64_t mantissa = recoverMantissa(observed);
     xorShift128PlusSymbolic();
-    solver.add(context.bv_val(mantissa, 64) ==
-               ((sState0 + sState1) & kDoubleSignificantMaskSymbolic));
+    solver.add(context.bv_val(mantissa, 64) == ((sState0 + sState1) & kDoubleSignificantMaskSymbolic));
   }
 
   if (solver.check() != z3::sat) {
@@ -59,6 +57,5 @@ uint64_t FirefoxPredictor::recoverMantissa(double value) {
 }
 
 double FirefoxPredictor::toDouble(uint64_t value) {
-  return static_cast<double>(value & kDoubleSignificantMask) /
-         (1ULL << kDoubleSignificantBits);
+  return static_cast<double>(value & kDoubleSignificantMask) / (1ULL << kDoubleSignificantBits);
 }

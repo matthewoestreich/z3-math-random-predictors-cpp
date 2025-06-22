@@ -2,12 +2,19 @@
 
 #include <z3++.h>
 
+struct NodeVersion {
+  int major;
+  int minor;
+  int patch;
+};
+
 class V8Predictor {
- public:
-  V8Predictor(const std::vector<double> &sequence);
+public:
+  V8Predictor(const NodeVersion &version, const std::vector<double> &sequence);
   double predictNext();
 
- private:
+private:
+  NodeVersion nodeVersion;
   std::vector<double> sequence;
   uint64_t cState0;
   uint64_t cState1;
@@ -17,7 +24,7 @@ class V8Predictor {
   z3::expr sState1;
 
   void xorShift128PlusSymbolic();
+  void recoverMantissaAndAddToSolver(double value);
   uint64_t xorShift128PlusConcrete();
-  uint64_t recoverMantissa(double value);
   double toDouble(uint64_t value);
 };
